@@ -7,14 +7,14 @@ import com.cisc181.eNums.eMajor;
 
 public class Student extends Person {
 
-	private String Major;
+	private eMajor Major;
 	private UUID StudentID;
 	
-	public String getMajor ( )
+	public eMajor getMajor ( )
     {
         return this.Major;
     }
-    public void setMajor (String Major)
+    public void setMajor (eMajor Major)
     {
         this.Major = Major;    
     }
@@ -23,7 +23,7 @@ public class Student extends Person {
     	return this.StudentID;
     }
     
-	public Student(String FirstName, String MiddleName, String LastName,Date DOB, String Major,
+	public Student(String FirstName, String MiddleName, String LastName,Date DOB, eMajor Major,
 			String Address, String Phone_number, String Email)
 	{
 		super(FirstName, MiddleName, LastName, DOB, Address, Phone_number, Email);

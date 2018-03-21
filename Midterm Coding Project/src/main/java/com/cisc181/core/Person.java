@@ -46,10 +46,11 @@ public abstract class Person implements java.io.Serializable {
 		return DOB;
 	}
 
-	public void setDOB(Date DOB){
+	public void setDOB(Date DOB) throws PersonException{
+		if(getAge(DOB) > 100) {
+			throw new PersonException("Older then 100", this);
+		}
 		this.DOB = DOB;
-		
-		
 	}
 
 	public void setAddress(String newAddress) {
@@ -60,9 +61,10 @@ public abstract class Person implements java.io.Serializable {
 		return address;
 	}
 
-	public void setPhone(String newPhone_number) {
+	public void setPhone(String newPhone_number) throws PersonException {
+		if(Pattern.compile("^\\([0-9]{3}\\)-[0-9]{3}-[0-9]{4}$").matcher(newPhone_number).matches())
+			throw new PersonException("invalid phone number formatting", this);
 		phone_number = newPhone_number;
-	
 	}
 
 	public String getPhone() {
@@ -89,15 +91,19 @@ public abstract class Person implements java.io.Serializable {
 	 */
 
 	public Person(String FirstName, String MiddleName, String LastName,
-			Date DOB, String Address, String Phone_number, String Email)
+			Date DOB, String Address, String Phone_number, String Email) 
 	{
 		this.FirstName = FirstName;
 		this.MiddleName = MiddleName;
 		this.LastName = LastName;
-		this.setDOB(DOB);
 		this.address = Address;
-		this.setPhone(Phone_number);
 		this.email_address = Email;
+		try {
+		this.setDOB(DOB);
+		this.setPhone(Phone_number);
+		}
+		catch(Exception e) {
+		}
 		
 	}
 
@@ -109,13 +115,13 @@ public abstract class Person implements java.io.Serializable {
 	public void PrintDOB() {
 		System.out.println(this.DOB);
 	}
-
-	public int PrintAge() {
+	
+	public static int getAge(Date dob) {
 		Calendar today = Calendar.getInstance();
 		Calendar birthDate = Calendar.getInstance();
 
 		int age = 0;
-		birthDate.setTime(this.DOB);
+		birthDate.setTime(dob);
 		if (birthDate.after(today)) {
 			throw new IllegalArgumentException("Can't be born in the future");
 		}
@@ -135,9 +141,12 @@ public abstract class Person implements java.io.Serializable {
 						.get(Calendar.DAY_OF_MONTH))) {
 			age--;
 		}
+		return age;
+	}
 
+	public int PrintAge() {
+		int age = getAge(this.DOB);
 		System.out.println("age is " + age);
-
 		return age;
 
 	}
