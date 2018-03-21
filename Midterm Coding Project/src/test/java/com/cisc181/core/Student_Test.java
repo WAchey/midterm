@@ -81,8 +81,26 @@ public class Student_Test {
 			assertEquals(studentGpa.get(i), calcGPA(stEnroll), .01);
 			i++;
 		}
+		//TODO get value for testAvg
+		double testAvg = 0;
 		
 		
+		for(Course course : courseList) {
+			double avg = 0;
+			int gCount = 0;
+			for(Section section : sectionList) {
+				if(section.getCourseID().equals(course.getCourseID())) {
+					for(Enrollment enroll : enrolled) {
+						if(section.getSectionID().equals(enroll.getSectionID())) {
+							gCount++;
+							avg += enroll.getGrade();
+						}
+					}
+				}
+			}
+			avg /= (double)gCount;
+			assertEquals(testAvg, avg, .001);
+		}
 		
 		
 	}
